@@ -1,215 +1,873 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio Francisco Galea</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="assets/styles.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Francisco Galea — .NET Backend Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  
+/* ── Reset & Tokens ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #0c0d0f;
+  --bg2:       #111316;
+  --bg3:       #17191d;
+  --border:    #23262d;
+  --text:      #e8eaf0;
+  --muted:     #6b7280;
+  --accent:    #3b82f6;
+  --accent2:   #60a5fa;
+  --mono:      'DM Mono', monospace;
+  --sans:      'DM Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Noise texture overlay ──────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: .35;
+}
+
+/* ── Layout ─────────────────────────────────────────────────── */
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 28px;
+  position: relative;
+  z-index: 1;
+}
+
+section { padding: 80px 0; }
+section + section { border-top: 1px solid var(--border); }
+
+/* ── Nav ────────────────────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(12,13,15,.7);
+  border-bottom: 1px solid var(--border);
+}
+nav .inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 28px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: .05em;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--text); }
+
+/* ── Hero ───────────────────────────────────────────────────── */
+#hero {
+  padding-top: 160px;
+  padding-bottom: 100px;
+  border-top: none;
+}
+
+.hero-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeUp .6s ease forwards;
+}
+.hero-label::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
+
+h1 {
+  font-family: var(--sans);
+  font-size: clamp(38px, 7vw, 62px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  color: var(--text);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeUp .6s .1s ease forwards;
+}
+
+.hero-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 40px;
+  opacity: 0;
+  animation: fadeUp .6s .2s ease forwards;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp .6s .3s ease forwards;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: .06em;
+  text-decoration: none;
+  transition: all .2s;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover {
+  background: var(--accent2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(59,130,246,.35);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: #3d4249;
+  transform: translateY(-1px);
+}
+
+/* ── Section headers ────────────────────────────────────────── */
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+h2 {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -.015em;
+  margin-bottom: 40px;
+  color: var(--text);
+}
+
+/* ── About ──────────────────────────────────────────────────── */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.about-text p {
+  color: var(--muted);
+  margin-bottom: 14px;
+  font-size: 14.5px;
+}
+.about-text p strong { color: var(--text); font-weight: 500; }
+
+.about-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.fact {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: border-color .2s;
+}
+.fact:hover { border-color: #3d4249; }
+.fact-icon {
+  font-family: var(--mono);
+  font-size: 18px;
+  color: var(--accent);
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.fact-text { font-size: 13px; color: var(--muted); }
+.fact-text strong { color: var(--text); font-size: 13px; font-weight: 500; display: block; }
+
+/* ── Projects ───────────────────────────────────────────────── */
+.project-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+  transition: border-color .25s, transform .25s;
+  position: relative;
+  overflow: hidden;
+}
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.project-card:hover {
+  border-color: #2d3340;
+  transform: translateY(-2px);
+}
+.project-card:hover::before { opacity: 1; }
+
+.project-card.featured {
+  border-color: rgba(59,130,246,.25);
+  background: linear-gradient(135deg, #111316 0%, #0f1420 100%);
+}
+.project-card.featured::before { opacity: .6; }
+
+.project-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  gap: 16px;
+}
+.project-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.project-name {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -.01em;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(59,130,246,.12);
+  color: var(--accent2);
+  border: 1px solid rgba(59,130,246,.2);
+  text-transform: uppercase;
+}
+.project-links {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  transition: all .2s;
+  letter-spacing: .04em;
+}
+.icon-link:hover {
+  color: var(--text);
+  border-color: var(--accent);
+  background: rgba(59,130,246,.08);
+}
+
+.project-desc {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.project-bullets {
+  list-style: none;
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.project-bullets li {
+  font-size: 13px;
+  color: var(--muted);
+  padding-left: 18px;
+  position: relative;
+}
+.project-bullets li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 11px;
+  top: 1px;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--muted);
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 3px 9px;
+  letter-spacing: .03em;
+  transition: color .2s, border-color .2s;
+}
+.tag:hover { color: var(--text); border-color: #3d4249; }
+
+/* ── Stack ──────────────────────────────────────────────────── */
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+.stack-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all .2s;
+  cursor: default;
+}
+.stack-item:hover {
+  border-color: #3d4249;
+  transform: translateY(-1px);
+  background: var(--bg3);
+}
+.stack-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.stack-name {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  letter-spacing: .02em;
+}
+.stack-item.learning .stack-dot {
+  background: transparent;
+  border: 1.5px solid var(--muted);
+}
+.stack-item.learning .stack-name { color: var(--muted); }
+
+.stack-category {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin: 28px 0 12px;
+}
+.stack-category:first-child { margin-top: 0; }
+
+/* ── Contact ────────────────────────────────────────────────── */
+.contact-wrap {
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.contact-desc {
+  color: var(--muted);
+  font-size: 14.5px;
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+.contact-icons {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.contact-icon-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--muted);
+  transition: color .25s, transform .25s;
+}
+.contact-icon-link svg {
+  width: 28px;
+  height: 28px;
+  fill: currentColor;
+  transition: fill .25s;
+}
+.contact-icon-link span {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  transition: color .25s;
+}
+
+/* The signature hover colors */
+.contact-icon-link.email:hover   { color: #ea4335; transform: translateY(-3px); }
+.contact-icon-link.github:hover  { color: #f0f6fc; transform: translateY(-3px); }
+.contact-icon-link.linkedin:hover{ color: #0a66c2; transform: translateY(-3px); }
+
+/* ── Footer ─────────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 0;
+}
+footer .inner {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-note {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+.footer-note a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+.footer-note a:hover { color: var(--text); }
+
+/* ── Animations ─────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .55s ease, transform .55s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3d4249; }
+
+/* ── Mobile ─────────────────────────────────────────────────── */
+@media (max-width: 620px) {
+  .about-grid { grid-template-columns: 1fr; }
+  .project-header { flex-direction: column; }
+  .nav-links { display: none; }
+  h1 { font-size: 36px; }
+  .stack-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
 </head>
 <body>
 
-
-<header>
-  <nav>
-    <a href="#hero">Inicio</a>
-    <a href="#about">Sobre mí</a>
-    <a href="#projects">Proyectos</a>
-    <a href="#tech">Tecnologías</a>
-    <a href="#contact">Contacto</a>
-  </nav>
-</header>
-
-<section class="hero" id="hero">
-  <h1>¡Hola! Soy Francisco Galea</h1>
-  <div class="animated-text"></div>
-</section>
-
-<section class="about" id="about">
-  <div class="about-text">
-    <p>Soy desarrollador backend con pasión por patrones de diseño y buenas prácticas en el desarrollo de software. Me gusta crear soluciones escalables y mantenibles.</p>
-    <p>Trabajo con .NET, SQL Server, y disfruto aprender nuevas tecnologías para mejorar continuamente mis proyectos.</p>
+<!-- ── NAV ───────────────────────────────────────────────────── -->
+<nav>
+  <div class="inner">
+    <a href="#hero" class="nav-logo">fg.dev</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
   </div>
-  <div class="about-img">
-    <img src="assets/img/retrato.png" alt="Icono Francisco Galea">
-  </div>
-</section>
+</nav>
 
-<section class="projects" id="projects">
-  <h2>Proyectos</h2>
-
-  <div class="project-card">
-    <img src="assets/img/gestin.jpg" alt="GestinProject">
-    <div class="project-content">
-      <div class="text">
-        <h3>Gestin</h3>
-        <p>
-            Gestin es un sistema de administración para institutos superiores de la provincia de Buenos Aires 
-            desarrollado por estudiantes del tercer año de la carrera de Técnico Superior en Análisis, Desarrollo y Programación de Aplicaciones del ISFT N° 194 de la ciudad de Miramar, 
-            partido de General Alvarado. Su desarrollo inició a principios del año 2022 y pretende ser un software de código abierto.</p>
-      </div>
-      <div class="project-tech">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" alt="SQL Server">
-      </div>
-      <a href="https://github.com/Francisco-Galea/Gestin" target="_blank" class="repo-btn">Ver en GitHub</a>
+<!-- ── HERO ──────────────────────────────────────────────────── -->
+<section id="hero">
+  <div class="container">
+    <p class="hero-label">Available for work</p>
+    <h1>Francisco<br>Galea</h1>
+    <p class="hero-sub">
+      .NET Backend Developer. I build clean, maintainable REST APIs
+      with a focus on architecture, scalability, and code that makes sense
+      six months later.
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="5 12 12 5 19 12"/><polyline points="5 19 12 12 19 19"/></svg>
+        See my work
+      </a>
+      <a href="https://github.com/Francisco-Galea" target="_blank" rel="noopener" class="btn btn-ghost">
+        GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/francisco-galea/" target="_blank" rel="noopener" class="btn btn-ghost">
+        LinkedIn
+      </a>
     </div>
   </div>
+</section>
 
-  <div class="project-card">
-    <img src="assets/img/favicon.png" alt="Presupuestito">
-    <div class="project-content">
-      <div class="text">
-        <h3>Presupuestito</h3>
+<!-- ── ABOUT ─────────────────────────────────────────────────── -->
+<section id="about">
+  <div class="container reveal">
+    <p class="section-label">About</p>
+    <h2>Who I am</h2>
+    <div class="about-grid">
+      <div class="about-text">
         <p>
-            Presupuestito fue un proyecto para una empresa privada relacionada a la fabricacion de muebles.
-            Este sistema permite la gestion de pagos de clientes, proveedores y trabajadores de la empresa; ademas de gestionar al completo 
-            informacion de estos mismos mencionados. Permitia la carga de materiales, la construccion de muebles y la cotizacion de estos
-            a partir de la formula que pidio el dueño de la empresa.
+          I'm a <strong>24-year-old backend developer</strong> based in Miramar, Argentina,
+          recently graduated as a Technical Analyst Programmer. I've been writing code
+          seriously for the past four years.
+        </p>
+        <p>
+          I care about <strong>Clean Architecture, SOLID principles</strong>, and building
+          systems that are actually enjoyable to work with. Not just code that runs —
+          code that lasts.
+        </p>
+        <p>
+          I learn by building real things. JobTracker started as a tool for my own
+          job search and ended up being the most complete project I've shipped.
         </p>
       </div>
-      <div class="project-tech">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" alt=".NET">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" alt="SQL Server">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" alt="Angular">
-    </div>
-      <a href="https://github.com/Valuncho/PresupuestitoBack" target="_blank" class="repo-btn">Ver en GitHub</a>
-    </div>
-  </div>
-
-  <div class="project-card">
-    <img src="assets/img/wildOnes.png" alt="WildOnes">
-    <div class="project-content">
-      <div class="text">
-        <h3>Wild Fran</h3>
-        <p>
-            Wild Fran fue un proyecto de fin de año de la carrera de Analista Programador. 
-            Este final era realizar un juego en el entorno de Godot usando GDScript.
-            Este juego es una replica del famoso juego Worms, jugador vs jugador, donde cada uno tiene un turno de tiempo
-            y acciones limitadas con algunas armas, durante la partida, aparecen drops que le permitiran al jugador que 
-            tome ese drop, obtener un arma nueva. Se implementó para jugar hasta un total de 6 jugadores.
-        </p>
-      </div>
-      <div class="project-tech">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/godot/godot-original.svg" alt="Godot">
-    </div>        
-      <a href="https://github.com/Francisco-Galea/Wild-Ones" target="_blank" class="repo-btn">Ver en GitHub</a>
-    </div>
-  </div>
-
-
-</section>
-
-
-<section class="tech" id="tech">
-  <h2>Tecnologías</h2>
-
-  <!-- Back End -->
-  <div class="tech-category">
-    <h3>Back End</h3>
-    <div class="tech-grid">
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C">
-        <span>C</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" alt="C#">
-        <span>C#</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg" alt=".NET">
-        <span>.NET</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java">
-        <span>Java</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftsqlserver/microsoftsqlserver-plain.svg" alt="SQL Server">
-        <span>SQL Server</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg" alt="MySQL">
-        <span>MySQL</span>
-      </div>
-      <div class="tech-item">
-        <img src="assets/img/icons8-jwt-48.png" alt="JWT">
-        <span>JWT</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" alt="Postman">
-        <span>Postman</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Front End -->
-  <div class="tech-category">
-    <h3>Front End</h3>
-    <div class="tech-grid">
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">
-        <span>HTML</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">
-        <span>CSS</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" alt="TypeScript">
-        <span>TypeScript</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg" alt="Bootstrap">
-        <span>Bootstrap</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg" alt="Angular">
-        <span>Angular</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- DevOps / Control de versiones -->
-  <div class="tech-category">
-    <h3>DevOps / Control de versiones</h3>
-    <div class="tech-grid">
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git">
-        <span>Git</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub">
-        <span>GitHub</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg" alt="GitLab">
-        <span>GitLab</span>
-      </div>
-      <div class="tech-item">
-        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" alt="Docker">
-        <span>Docker</span>
+      <div class="about-facts">
+        <div class="fact">
+          <span class="fact-icon">//</span>
+          <div class="fact-text">
+            <strong>Backend · C# · .NET</strong>
+            Primary stack, 4 years
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">→</span>
+          <div class="fact-text">
+            <strong>Clean Architecture & CQRS</strong>
+            Architecture focus
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">▲</span>
+          <div class="fact-text">
+            <strong>English B1 → B2</strong>
+            Currently studying
+          </div>
+        </div>
+        <div class="fact">
+          <span class="fact-icon">◎</span>
+          <div class="fact-text">
+            <strong>Open to remote & hybrid</strong>
+            Argentina / international
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="contact" id="contact">
-  <h2>Contacto</h2>
-  <p>Me encantaría conectarme contigo. ¡No dudes en escribirme!</p>
-  <div class="contact-icons">
-  <a href="https://www.linkedin.com/in/francisco-galea/" target="_blank" class="linkedin"><i class="fab fa-linkedin"></i></a>
-  <a href="https://github.com/Francisco-Galea" target="_blank" class="github"><i class="fab fa-github"></i></a>
-  <a href="mailto:galeafrancisco2001@gmail.com" class="email"><i class="fas fa-envelope"></i></a>
-</div>
+<!-- ── PROJECTS ───────────────────────────────────────────────── -->
+<section id="projects">
+  <div class="container">
+    <p class="section-label reveal">Projects</p>
+    <h2 class="reveal">What I've built</h2>
+
+    <!-- JobTracker -->
+    <div class="project-card featured reveal">
+      <div class="project-header">
+        <div class="project-title-row">
+          <span class="project-name">JobTracker API</span>
+          <span class="badge">Live</span>
+        </div>
+        <div class="project-links">
+          <a href="https://jobtracker-api-mydx.onrender.com/swagger/index.html" target="_blank" rel="noopener" class="icon-link">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Demo
+          </a>
+          <a href="https://github.com/Francisco-Galea/JobTracker" target="_blank" rel="noopener" class="icon-link">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Code
+          </a>
+        </div>
+      </div>
+      <p class="project-desc">
+        REST API for tracking job applications — built to solve a real problem during my own job search.
+        Register applications, follow their status, log contacts, and get analytics on your process.
+      </p>
+      <ul class="project-bullets">
+        <li>Clean Architecture with 4 layers: Domain, Application, Infrastructure, API</li>
+        <li>JWT authentication — register and login flow</li>
+        <li>CQRS pattern separating reads from writes (MediatR)</li>
+        <li>Analytics module: response rate, avg. time to feedback, distribution by status</li>
+        <li>Unit tests with xUnit and FluentAssertions</li>
+        <li>Dockerized — runs locally with a single command. Deployed and live.</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">C#</span>
+        <span class="tag">.NET 10</span>
+        <span class="tag">ASP.NET Core</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">EF Core</span>
+        <span class="tag">JWT</span>
+        <span class="tag">Docker</span>
+        <span class="tag">CQRS</span>
+        <span class="tag">xUnit</span>
+      </div>
+    </div>
+
+    <!-- Booking System -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-title-row">
+          <span class="project-name">Booking System</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Francisco-Galea" target="_blank" rel="noopener" class="icon-link">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Code
+          </a>
+        </div>
+      </div>
+      <p class="project-desc">
+        Desktop application for managing rentals of vehicles, properties, clothing and tech devices.
+        Full item catalog, client management, and booking control.
+      </p>
+      <ul class="project-bullets">
+        <li>Design patterns: Factory, Repository and Strategy</li>
+        <li>Desktop UI built with Windows Forms</li>
+        <li>Direct database access with ADO.NET</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">C#</span>
+        <span class="tag">.NET 8</span>
+        <span class="tag">Windows Forms</span>
+        <span class="tag">ADO.NET</span>
+        <span class="tag">SQL Server</span>
+      </div>
+    </div>
+
+    <!-- Gestin -->
+    <div class="project-card reveal">
+      <div class="project-header">
+        <div class="project-title-row">
+          <span class="project-name">Gestin</span>
+          <span class="badge" style="background:rgba(34,197,94,.1);color:#4ade80;border-color:rgba(34,197,94,.2);">Real users</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Francisco-Galea/Gestin" target="_blank" rel="noopener" class="icon-link">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            Code
+          </a>
+        </div>
+      </div>
+      <p class="project-desc">
+        Institutional management system for an educational institute in Buenos Aires province.
+        Developed during professional internship — real client requirements, real end-users, production environment.
+      </p>
+      <ul class="project-bullets">
+        <li>Feature development based on real client requirements</li>
+        <li>Refactoring of legacy code applying SOLID principles</li>
+        <li>Bug fixing and scalability improvements</li>
+      </ul>
+      <div class="tag-row">
+        <span class="tag">C#</span>
+        <span class="tag">.NET</span>
+        <span class="tag">Entity Framework</span>
+        <span class="tag">LINQ</span>
+        <span class="tag">SQL Server</span>
+      </div>
+    </div>
+
+  </div>
 </section>
 
+<!-- ── STACK ──────────────────────────────────────────────────── -->
+<section id="stack">
+  <div class="container reveal">
+    <p class="section-label">Stack</p>
+    <h2>Technologies</h2>
+
+    <p class="stack-category">Core</p>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">C#</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">.NET / .NET Core</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">ASP.NET Core</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">EF Core</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">PostgreSQL</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">SQL Server</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">Docker</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">JWT</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">Git & GitHub</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">xUnit</span></div>
+    </div>
+
+    <p class="stack-category">Architecture & Patterns</p>
+    <div class="stack-grid">
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">Clean Architecture</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">CQRS</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">SOLID</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">Design Patterns</span></div>
+      <div class="stack-item"><span class="stack-dot"></span><span class="stack-name">REST APIs</span></div>
+    </div>
+
+    <p class="stack-category">Learning</p>
+    <div class="stack-grid">
+      <div class="stack-item learning"><span class="stack-dot"></span><span class="stack-name">Azure</span></div>
+      <div class="stack-item learning"><span class="stack-dot"></span><span class="stack-name">Angular</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ────────────────────────────────────────────────── -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-wrap reveal">
+      <p class="section-label">Contact</p>
+      <h2>Get in touch</h2>
+      <p class="contact-desc">
+        Open to backend .NET roles — remote, hybrid, or local.<br>
+        If you're building something interesting, I'd like to hear about it.
+      </p>
+
+      <div class="contact-icons">
+
+        <!-- Email -->
+        <a href="mailto:galeafrancisco2001@gmail.com" class="contact-icon-link email" title="Email">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 4H4C2.9 4 2 4.9 2 6v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+          </svg>
+          <span>Email</span>
+        </a>
+
+        <!-- GitHub -->
+        <a href="https://github.com/Francisco-Galea" target="_blank" rel="noopener" class="contact-icon-link github" title="GitHub">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+
+        <!-- LinkedIn -->
+        <a href="https://www.linkedin.com/in/francisco-galea/" target="_blank" rel="noopener" class="contact-icon-link linkedin" title="LinkedIn">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────── -->
 <footer>
-  &copy; 2025 Francisco Galea. Todos los derechos reservados.
+  <div class="inner">
+    <span class="footer-note">Francisco Galea © 2026</span>
+    <span class="footer-note">
+      Built with HTML — <a href="https://github.com/Francisco-Galea/Portfolio" target="_blank" rel="noopener">source</a>
+    </span>
+  </div>
 </footer>
-<script src="assets/script.js"></script>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Active nav link highlight
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    if (window.scrollY >= section.offsetTop - 100) {
+      current = section.getAttribute('id');
+    }
+  });
+  navLinks.forEach(link => {
+    link.style.color = link.getAttribute('href') === `#${current}` ? 'var(--text)' : '';
+  });
+}, { passive: true });
+</script>
 </body>
 </html>
